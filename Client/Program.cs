@@ -14,8 +14,8 @@ namespace DeepLearning
     {
         static void Main(string[] args)
         {
-            double[][][] d = IO.LoadAllText(@"C:\0\Lab\DNN\test.txt");
-            double[][] o = new DNN(@"C:\0\Lab\DNN\a.dnn").Compute(d[0]);
+            double[][][] d = IO.LoadAllText(@"C:\DNN\test.txt");
+            double[][] o = new DNN(@"C:\DNN\a.dnn").Compute(d[0]);
 
             Test.ShowText(d[0], d[1], o);
             Console.ReadLine();
