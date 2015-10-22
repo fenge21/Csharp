@@ -102,7 +102,7 @@ namespace DeepMagic
         //        }
         //        Thread.Sleep(2000);
         //    }
-        //} //怎么用？还不知道
+        //}
         public double[][] Compute(double[][] inputs)
         {
             if (n == null)
