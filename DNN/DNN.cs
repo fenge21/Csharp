@@ -14,27 +14,14 @@ namespace DeepMagic
 {
     public class DNN
     {
-        private string dl { get; set; }
+        private string p { get; set; }
         private DeepBeliefNetwork n { get; set; }
-        public DNN(string dl) { this.dl = dl; }
+        public DNN(string path) { p = path; }
         public void TrainSupervised(double[][] inputs, double[][] outputs)
         {
             if (n == null)
             {
-                if (File.Exists(dl))
-                {
-                    while (n == null)
-                    {
-                        try
-                        {
-                            n = DeepBeliefNetwork.Load(dl);
-                        }
-                        catch (Exception)
-                        {
-                            Thread.Sleep(500);
-                        }
-                    }
-                }
+                if (File.Exists(p)) n = DeepBeliefNetwork.Load(p);
                 else
                 {
                     n = new DeepBeliefNetwork(new BernoulliFunction(), inputs[0].Length, inputs[0].Length, inputs[0].Length, outputs[0].Length);
@@ -49,82 +36,39 @@ namespace DeepMagic
             {
                 Console.WriteLine(e);
                 n.UpdateVisibleWeights();
-                try
-                {
-                    n.Save(dl);
-                }
-                catch (Exception)
-                {
-
-                }
-                Thread.Sleep(1000*10);
+                n.Save(p);
+                Thread.Sleep(1000 * 10);
             }
         }
-        //public void TrainUnSupervised(double[][] inputs)
-        //{
-        //    if (n == null)
-        //    {
-        //        if (File.Exists(dl))
-        //        {
-        //            while (n == null)
-        //            {
-        //                try
-        //                {
-        //                    n = DeepBeliefNetwork.Load(dl);
-        //                }
-        //                catch (Exception)
-        //                {
-        //                    Thread.Sleep(500);
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            n = new DeepBeliefNetwork(new BernoulliFunction(), inputs[0].Length, 1024, 500, 100, 10);
-        //            new GaussianWeights(n).Randomize();
-        //        }
-        //    }
+        public void TrainUnSupervised(double[][] inputs)
+        {
+            if (n == null)
+            {
+                if (File.Exists(p)) n = DeepBeliefNetwork.Load(p);
+                else
+                {
+                    n = new DeepBeliefNetwork(new BernoulliFunction(), inputs[0].Length, 1024, 500, 100, 10);
+                    new GaussianWeights(n).Randomize();
+                }
+            }
 
-        //    var t = new DeepBeliefNetworkLearning(n) { Algorithm = (h, v, i) => new ContrastiveDivergenceLearning(h, v), LayerIndex = n.Machines.Count - 1, };
-        //    double e = 100;
-        //    new Task(() => { while (true) e = t.RunEpoch(t.GetLayerInput(inputs)); }).Start();
-        //    while (true)
-        //    {
-        //        Console.WriteLine(e);
-        //        n.UpdateVisibleWeights();
-        //        try
-        //        {
-        //            n.Save(dl);
-        //        }
-        //        catch (Exception)
-        //        {
-
-        //        }
-        //        Thread.Sleep(2000);
-        //    }
-        //}
+            var t = new DeepBeliefNetworkLearning(n) { Algorithm = (h, v, i) => new ContrastiveDivergenceLearning(h, v), LayerIndex = n.Machines.Count - 1, };
+            double e = 100;
+            new Task(() => { while (true) e = t.RunEpoch(t.GetLayerInput(inputs)); }).Start();
+            while (true)
+            {
+                Console.WriteLine(e);
+                n.UpdateVisibleWeights();
+                n.Save(p);
+                Thread.Sleep(1000 * 10);
+            }
+        }
         public double[][] Compute(double[][] inputs)
         {
             if (n == null)
             {
-                if (File.Exists(dl))
-                {
-                    while (n == null)
-                    {
-                        try
-                        {
-                            n = DeepBeliefNetwork.Load(dl);
-                        }
-                        catch (Exception)
-                        {
-                            Thread.Sleep(500);
-                        }
-                    }
-                }
-                else
-                {
-                    throw new Exception("No DNN Found!");
-                }
+                if (File.Exists(p)) n = DeepBeliefNetwork.Load(p);
+                else throw new Exception("No DNN Found!");
             }
 
             List<double[]> d = new List<double[]>();
