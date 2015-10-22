@@ -12,7 +12,7 @@ namespace Server
         static void Main(string[] args)
         {
             double[][][] io = IO.LoadAllText(@"C:\DNN\train.txt");
-            new DNN(@"C:\DNN\a.dnn").TrainSupervised(io[0], io[1]);
+            new DNN(@"C:\DNN\a.dnn").Train(io[0], io[1]);
         }
     }
 }
