@@ -29,10 +29,7 @@ namespace DeepLearning
             {
                 int a = IO.double2int(o[i]);
                 int b = IO.double2int(t[i]);
-                if (a == b)
-                {
-                    rightCount[b] = rightCount[b] + 1;
-                }
+                if (a == b) rightCount[b] = rightCount[b] + 1;
                 else
                 {
                     errorCount[b] = errorCount[b] + 1;
@@ -45,9 +42,7 @@ namespace DeepLearning
                 }
             }
             for (int i = 0; i < 10; i++)
-            {
                 Console.WriteLine(i + " : " + (100.0 * rightCount[i] / (errorCount[i] + rightCount[i])) + "%");
-            }
 
             Console.WriteLine("Summery: " + (100.0 * rightCount.Sum() / t.Length).ToString("0.00") + "%");
         }

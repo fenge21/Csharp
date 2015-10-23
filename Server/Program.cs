@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DeepMagic;
+using System.Threading;
 
 namespace Server
 {
@@ -12,7 +13,15 @@ namespace Server
         static void Main(string[] args)
         {
             double[][][] io = IO.LoadAllText(@"C:\DNN\train.txt");
-            new DNN(@"C:\DNN\a.dnn").Train(io[0], io[1]);
+            DNN d = new DNN(@"C:\DNN\a.dnn");
+            new Task(() => { d.Train(io[0], io[1]); }).Start();
+
+            while (true)
+            {
+                Thread.Sleep(1000 * 10);
+                Console.WriteLine(d.e);
+                d.Save();
+            }
         }
     }
 }
