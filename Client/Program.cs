@@ -39,18 +39,17 @@ namespace DeepLearning
                     for (int j = 0; j < r[i].Length; j++)
                     {
                         Console.Write(r[i][j]);
-                        if (j % 32 == 0)
-                            Console.WriteLine("");
+                        if ((j + 1) % 32 == 0) Console.WriteLine("");
                     }
-                    Console.WriteLine(b + " is not " + a);
+                    Console.WriteLine("It's " + b + " not " + a);
                 }
             }
             for (int i = 0; i < 10; i++)
             {
-                Console.WriteLine("\n" + i + " : " + (100.0 * rightCount[i] / (errorCount[i] + rightCount[i])) + "%");
+                Console.WriteLine(i + " : " + (100.0 * rightCount[i] / (errorCount[i] + rightCount[i])) + "%");
             }
 
-            Console.WriteLine("\n" + (100.0 * rightCount.Sum() / t.Length).ToString("0.00") + "%");
+            Console.WriteLine("Summery: " + (100.0 * rightCount.Sum() / t.Length).ToString("0.00") + "%");
         }
         public static void ComputeImg(string s)
         {
