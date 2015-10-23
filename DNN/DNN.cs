@@ -19,14 +19,19 @@ namespace DeepMagic
         public double e { get; private set; }
         public DNN(string path) { p = path; }
 
-        public void Train(double[][] i, double[][] o = null)
+        public void Train(double[][] i, double[][] o = null, int outputLength = 10, int hiddenLayer = -1)
         {
             if (n == null)
             {
                 if (File.Exists(p)) n = DeepBeliefNetwork.Load(p);
                 else
                 {
-                    n = new DeepBeliefNetwork(new BernoulliFunction(), i[0].Length, i[0].Length, i[0].Length, o == null ? i[0].Length : o[0].Length);
+                    outputLength = (o == null) ? outputLength : o[0].Length;
+                    hiddenLayer = (hiddenLayer == -1) ? (int)Math.Log(i[0].Length, outputLength) : hiddenLayer;
+                    List<int> layers = new List<int>();
+                    for (int j = 0; j < hiddenLayer; j++) layers.Add(i[0].Length);
+                    layers.Add(outputLength);
+                    n = new DeepBeliefNetwork(new BernoulliFunction(), i[0].Length, layers.ToArray());
                     new GaussianWeights(n).Randomize();
                 }
             }
